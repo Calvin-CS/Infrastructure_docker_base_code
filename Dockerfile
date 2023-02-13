@@ -157,14 +157,16 @@ RUN echo "deb [signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.mic
 #    apt-get install -y dotnet-sdk-3.1 dotnet-sdk-7.0 && \
 #    rm -rf /var/lib/apt/lists/*
 
-# microsoft code cli
-#RUN echo "deb [signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/code/ stable main" | tee -a /etc/apt/sources.list.d/microsoft-vscode-${UBUNTUCODENAME}.list && \
-#    apt-get update -y && \
-#    apt-get install -y code && \
-#    rm -f /etc/apt/sources.list.d/vscode.list && \
-#    rm -rf /var/lib/apt/lists/*
-RUN curl -fsSL https://code.visualstudio.com/sha/download?build=stable\&os=cli-alpine-x64 | tar zxfv - -C/usr/local/bin && \
-    chmod 0775 /usr/local/bin/code
+# microsoft vs code - full install
+RUN echo "deb [signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/code/ stable main" | tee -a /etc/apt/sources.list.d/microsoft-vscode-${UBUNTUCODENAME}.list && \
+    apt-get update -y && \
+    apt-get install -y code && \
+    rm -f /etc/apt/sources.list.d/vscode.list && \
+    rm -rf /var/lib/apt/lists/*
+
+# microsoft vs code cli - only cli install
+#RUN curl -fsSL https://code.visualstudio.com/sha/download?build=stable\&os=cli-alpine-x64 | tar zxfv - -C/usr/local/bin && \
+#    chmod 0775 /usr/local/bin/code
 
 # mpich alternatives
 COPY inc/mpi-set-selections.txt /tmp/mpi-set-selections.txt
