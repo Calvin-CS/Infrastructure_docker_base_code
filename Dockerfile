@@ -104,9 +104,6 @@ RUN apt-get update -y && \
     libgomp1 \
     libomp5 \
     libomp-dev \
-    # screen/tmux
-    screen \
-    tmux \
     # tofrodos
     tofrodos \
     # vim
