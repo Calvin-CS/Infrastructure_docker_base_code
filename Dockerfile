@@ -2,7 +2,7 @@ FROM calvincs.azurecr.io/base-sssdunburden:latest
 LABEL maintainer="Chris Wieringa <cwieri39@calvin.edu>"
 
 # Set versions and platforms
-ARG BUILDDATE=20230213-1
+ARG BUILDDATE=20230213-3
 ARG S6_OVERLAY_VERSION=3.1.3.0
 ARG TZ=America/Detroit
 ARG UBUNTUCODENAME="focal"
@@ -39,6 +39,12 @@ RUN apt-get update -y && \
     python3-scipy \
     python3-gmplot \
     python3-pil \
+    python3-guizero \
+    python3-pygame \
+    python3-pgzero \
+    python3-colorama \
+    python3-bs4 \
+    python3-pandas \
     cython3 \
     libtiff5-dev \
     libjpeg8-dev \
@@ -54,11 +60,8 @@ RUN apt-get update -y && \
     libxcb1-dev \
     # cs112 
     build-essential \
-    libportaudio2 \
-    portaudio19-dev \
     ddd \
     valgrind \
-    tsal \
     tsgl \
     bridges-cxx \
     # cs326
@@ -80,14 +83,10 @@ RUN apt-get update -y && \
     emacs-el \
     emacs \
     emacs-goodies-el \
-    # fsharp
-    fsharp \
-    mono-complete \
-    # gedit
-    gedit \
-    gedit-plugins \
     # git 
     git \
+    # java
+    default-jdk-headless \
     # maven
     maven \
     # mpe2
@@ -105,8 +104,6 @@ RUN apt-get update -y && \
     libgomp1 \
     libomp5 \
     libomp-dev \
-    # parallel - cpscadmin repo
-    parallel \
     # screen/tmux
     screen \
     tmux \
@@ -151,22 +148,26 @@ RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.c
 RUN curl https://cli-assets.heroku.com/install-ubuntu.sh | bash && \
     rm -rf /var/lib/apt/lists/*
 
-# microsoft dotnet
+# microsoft key
 RUN echo "deb [signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/ubuntu/${UBUNTUVERSION}/prod/ ${UBUNTUCODENAME} main" | tee -a /etc/apt/sources.list.d/microsoft-prod-${UBUNTUCODENAME}.list && \
     curl https://packages.microsoft.com/keys/microsoft.asc | tee /tmp/microsoft.asc && \
     gpg --dearmor /tmp/microsoft.asc && \
     mv /tmp/microsoft.asc.gpg /usr/share/keyrings/microsoft.gpg && \
-    rm -f /tmp/microsoft.asc && \
-    apt-get update -y && \
-    apt-get install -y dotnet-sdk-3.1 dotnet-sdk-7.0 && \
-    rm -rf /var/lib/apt/lists/*
+    rm -f /tmp/microsoft.asc
+
+# microsoft dotnet
+#RUN apt-get update -y && \
+#    apt-get install -y dotnet-sdk-3.1 dotnet-sdk-7.0 && \
+#    rm -rf /var/lib/apt/lists/*
 
 # microsoft code cli
-RUN echo "deb [signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/code/ stable main" | tee -a /etc/apt/sources.list.d/microsoft-vscode-${UBUNTUCODENAME}.list && \
-    apt-get update -y && \
-    apt-get install -y code && \
-    rm -f /etc/apt/sources.list.d/vscode.list && \
-    rm -rf /var/lib/apt/lists/*
+#RUN echo "deb [signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/code/ stable main" | tee -a /etc/apt/sources.list.d/microsoft-vscode-${UBUNTUCODENAME}.list && \
+#    apt-get update -y && \
+#    apt-get install -y code && \
+#    rm -f /etc/apt/sources.list.d/vscode.list && \
+#    rm -rf /var/lib/apt/lists/*
+RUN curl -fsSL https://code.visualstudio.com/sha/download?build=stable\&os=cli-alpine-x64 | tar zxfv - -C/usr/local/bin && \
+    chmod 0775 /usr/local/bin/code
 
 # mpich alternatives
 COPY inc/mpi-set-selections.txt /tmp/mpi-set-selections.txt
