@@ -2,7 +2,7 @@ FROM calvincs.azurecr.io/base-sssdunburden:latest
 LABEL maintainer="Chris Wieringa <cwieri39@calvin.edu>"
 
 # Set versions and platforms
-ARG BUILDDATE=20230213-3
+ARG BUILDDATE=20230719-1
 ARG S6_OVERLAY_VERSION=3.1.3.0
 ARG TZ=America/Detroit
 ARG UBUNTUCODENAME="focal"
@@ -135,8 +135,8 @@ RUN echo "deb [signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] http
     rm -rf /var/lib/apt/lists/*
 
 # google cloud CLI
-RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
-    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | tee /usr/share/keyrings/cloud.google.gpg && \
+RUN echo "deb http://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
+    apt-key adv --keyserver keyserver.ubuntu.com --recv B53DC80D13EDEF05 && \
     apt-get update -y && \
     apt-get install google-cloud-sdk -y && \
     rm -rf /var/lib/apt/lists/*
