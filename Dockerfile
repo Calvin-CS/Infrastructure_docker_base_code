@@ -2,7 +2,7 @@ FROM calvincs.azurecr.io/base-sssdunburden:latest
 LABEL maintainer="Chris Wieringa <cwieri39@calvin.edu>"
 
 # Set versions and platforms
-ARG BUILDDATE=20230719-1
+ARG BUILDDATE=20230720-1
 ARG S6_OVERLAY_VERSION=3.1.3.0
 ARG TZ=America/Detroit
 ARG UBUNTUCODENAME="focal"
@@ -45,6 +45,7 @@ RUN apt-get update -y && \
     python3-colorama \
     python3-bs4 \
     python3-pandas \
+    python3-pexpect \
     cython3 \
     libtiff5-dev \
     libjpeg8-dev \
